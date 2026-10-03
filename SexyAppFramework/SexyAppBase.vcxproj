@@ -210,8 +210,10 @@ robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform
 if errorlevel 8 exit /b %errorlevel%
 robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /S
 if errorlevel 8 exit /b %errorlevel%
+if not exist "%PVZ_DIR%" goto :pvz_pak_skip
 robocopy "%PVZ_DIR%" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /S
 if errorlevel 8 exit /b %errorlevel%
+:pvz_pak_skip
 if exist "%PVZ_DIR%\properties" robocopy "%PVZ_DIR%\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /S
 if errorlevel 8 exit /b %errorlevel%
 
@@ -221,7 +223,7 @@ exit /b 0</Command>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalOptions>/utf-8 /wd4996 %(AdditionalOptions)</AdditionalOptions>
-      <PreprocessorDefinitions>_LIB;_WINDOWS;_VISUALC_;_JPEGLIB_;OPTIMIZE_SOFTWARE_DRAWING;DO_FIX_BUGS;_ENABLE_DRM_FOR__DEBUGGING;_WIN64;WIN64;_GOTY;GOTY</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_LIB;_WINDOWS;_VISUALC_;_JPEGLIB_;OPTIMIZE_SOFTWARE_DRAWING;DO_FIX_BUGS;_ENABLE_DRM_FOR__DEBUGGING;_WIN64;WIN64</PreprocessorDefinitions>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -256,8 +258,10 @@ robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform
 if errorlevel 8 exit /b %errorlevel%
 robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /S
 if errorlevel 8 exit /b %errorlevel%
+if not exist "%PVZ_DIR%" goto :pvz_pak_skip
 robocopy "%PVZ_DIR%" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /S
 if errorlevel 8 exit /b %errorlevel%
+:pvz_pak_skip
 if exist "%PVZ_DIR%\properties" robocopy "%PVZ_DIR%\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /S
 if errorlevel 8 exit /b %errorlevel%
 
@@ -303,8 +307,10 @@ robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform
 if errorlevel 8 exit /b %errorlevel%
 robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /S
 if errorlevel 8 exit /b %errorlevel%
+if not exist "%PVZ_DIR%" goto :pvz_pak_skip
 robocopy "%PVZ_DIR%" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /S
 if errorlevel 8 exit /b %errorlevel%
+:pvz_pak_skip
 if exist "%PVZ_DIR%\properties" robocopy "%PVZ_DIR%\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /S
 if errorlevel 8 exit /b %errorlevel%
 
@@ -351,8 +357,10 @@ robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform
 if errorlevel 8 exit /b %errorlevel%
 robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /S
 if errorlevel 8 exit /b %errorlevel%
+if not exist "%PVZ_DIR%" goto :pvz_pak_skip
 robocopy "%PVZ_DIR%" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /S
 if errorlevel 8 exit /b %errorlevel%
+:pvz_pak_skip
 if exist "%PVZ_DIR%\properties" robocopy "%PVZ_DIR%\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /S
 if errorlevel 8 exit /b %errorlevel%
 
@@ -398,8 +406,10 @@ robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform
 if errorlevel 8 exit /b %errorlevel%
 robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /S
 if errorlevel 8 exit /b %errorlevel%
+if not exist "%PVZ_DIR%" goto :pvz_pak_skip
 robocopy "%PVZ_DIR%" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /S
 if errorlevel 8 exit /b %errorlevel%
+:pvz_pak_skip
 if exist "%PVZ_DIR%\properties" robocopy "%PVZ_DIR%\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /S
 if errorlevel 8 exit /b %errorlevel%
 
@@ -409,7 +419,7 @@ exit /b 0</Command>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalOptions>/Oy- /utf-8 /wd4996 %(AdditionalOptions)</AdditionalOptions>
-      <PreprocessorDefinitions>_LIB;_WINDOWS;_VISUALC_;_JPEGLIB_;OPTIMIZE_SOFTWARE_DRAWING;DO_FIX_BUGS;_ENABLE_DRM_FOR__DEBUGGING;_WIN64;WIN64;NDEBUG;_GOTY;GOTY</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_LIB;_WINDOWS;_VISUALC_;_JPEGLIB_;OPTIMIZE_SOFTWARE_DRAWING;DO_FIX_BUGS;_ENABLE_DRM_FOR__DEBUGGING;_WIN64;WIN64;NDEBUG</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -447,8 +457,10 @@ robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform
 if errorlevel 8 exit /b %errorlevel%
 robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /S
 if errorlevel 8 exit /b %errorlevel%
+if not exist "%PVZ_DIR%" goto :pvz_pak_skip
 robocopy "%PVZ_DIR%" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /S
 if errorlevel 8 exit /b %errorlevel%
+:pvz_pak_skip
 if exist "%PVZ_DIR%\properties" robocopy "%PVZ_DIR%\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /S
 if errorlevel 8 exit /b %errorlevel%
 
@@ -495,8 +507,10 @@ robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform
 if errorlevel 8 exit /b %errorlevel%
 robocopy "$(SolutionDir)bin\x86" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /S
 if errorlevel 8 exit /b %errorlevel%
+if not exist "%PVZ_DIR%" goto :pvz_pak_skip
 robocopy "%PVZ_DIR%" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /S
 if errorlevel 8 exit /b %errorlevel%
+:pvz_pak_skip
 if exist "%PVZ_DIR%\properties" robocopy "%PVZ_DIR%\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /S
 if errorlevel 8 exit /b %errorlevel%
 
@@ -544,8 +558,10 @@ robocopy "$(SolutionDir)assets" "$(SolutionDir)build\$(Configuration)_$(Platform
 if errorlevel 8 exit /b %errorlevel%
 robocopy "$(SolutionDir)bin\x64" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.dll /S
 if errorlevel 8 exit /b %errorlevel%
+if not exist "%PVZ_DIR%" goto :pvz_pak_skip
 robocopy "%PVZ_DIR%" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin" *.pak /S
 if errorlevel 8 exit /b %errorlevel%
+:pvz_pak_skip
 if exist "%PVZ_DIR%\properties" robocopy "%PVZ_DIR%\properties" "$(SolutionDir)build\$(Configuration)_$(Platform)\bin\properties" /S
 if errorlevel 8 exit /b %errorlevel%
 

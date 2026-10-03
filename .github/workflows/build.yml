@@ -1,0 +1,76 @@
+name: CI Build
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ${{ matrix.config }} (${{ matrix.platform }})
+    runs-on: windows-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - config: Release
+            platform: Win32
+          - config: Release
+            platform: x64
+          - config: ReleaseGOTY
+            platform: Win32
+          - config: ReleaseGOTY
+            platform: x64
+
+    steps:
+      - name: Checkout (with Git LFS)
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Materialize Git LFS objects
+        shell: pwsh
+        run: |
+          git lfs install
+          git lfs pull
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Clean build directory
+        shell: pwsh
+        run: |
+          if (Test-Path build) { Remove-Item -Recurse -Force build }
+
+      - name: Build (${{ matrix.config }} | ${{ matrix.platform }})
+        shell: pwsh
+        run: |
+          msbuild PlantsVsZombies.sln /p:Configuration=${{ matrix.config }} /p:Platform=${{ matrix.platform }} /t:Build /m /nologo /v:minimal
+
+      - name: Verify output artifacts
+        shell: pwsh
+        run: |
+          $bin = "build\${{ matrix.config }}_${{ matrix.platform }}\bin"
+          if (-not (Test-Path $bin)) { throw "Output directory missing: $bin" }
+          $required = @(
+            "PlantsVsZombies.exe",
+            "dependency.pak",
+            "SDL3.dll",
+            "SDL3_ttf.dll",
+            "bass.dll"
+          )
+          foreach ($f in $required) {
+            $p = Join-Path $bin $f
+            if (-not (Test-Path $p)) { throw "Missing required artifact: $f" }
+          }
+          Write-Host "All required artifacts present in $bin"
+          Get-ChildItem $bin | Select-Object Name, Length
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pvz-${{ matrix.config }}-${{ matrix.platform }}
+          path: build/${{ matrix.config }}_${{ matrix.platform }}/bin
+          if-no-files-found: error

@@ -443,10 +443,32 @@ bool DescParser::LoadDescriptor(const std::string& theFileName)
 
 	char aBuffChar = 0;
 
+	// 豆包修复：剥离 UTF-8 BOM（EF BB BF）。
+	// 中文年度版字体描述文件（如 BrianneTod*.txt）为 UTF-8 带 BOM 编码，
+	// 若不去除 BOM，EF BB BF 会被当作首字符参与解析导致失败。
+	int aPushback[3] = { 0, 0, 0 };
+	int aPushbackCount = 0;
+	{
+		int aB0 = p_fgetc(aStream);
+		int aB1 = p_fgetc(aStream);
+		int aB2 = p_fgetc(aStream);
+		if (aB0 == 0xEF && aB1 == 0xBB && aB2 == 0xBF)
+		{
+			// 命中 UTF-8 BOM：直接丢弃，从 BOM 之后继续解析
+		}
+		else
+		{
+			// 不是 BOM：按原顺序回放，保证与未改动前行为一致
+			if (aB0 != EOF) aPushback[aPushbackCount++] = aB0;
+			if (aB1 != EOF) aPushback[aPushbackCount++] = aB1;
+			if (aB2 != EOF) aPushback[aPushbackCount++] = aB2;
+		}
+	}
+
 	while (!p_feof(aStream))
 	{		
 		int aChar;
-						
+					
 		bool skipLine = false;
 		bool atLineStart = true;
 		bool inSingleQuotes = false;
@@ -460,6 +482,13 @@ bool DescParser::LoadDescriptor(const std::string& theFileName)
 			{
 				aChar = aBuffChar;
 				aBuffChar = 0;
+			}
+			else if (aPushbackCount > 0)
+			{
+				aChar = aPushback[0];
+				for (int i = 1; i < aPushbackCount; i++)
+					aPushback[i - 1] = aPushback[i];
+				aPushbackCount--;
 			}
 			else
 			{
@@ -556,3 +585,4 @@ bool DescParser::LoadDescriptor(const std::string& theFileName)
 	p_fclose(aStream);
 	return !hasErrors;
 }
+

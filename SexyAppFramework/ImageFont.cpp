@@ -257,7 +257,9 @@ bool FontData::GetColorFromDataElement(DataElement *theElement, Color &theColor)
 	if (theElement->mIsList)
 	{				
 		DoubleVector aFactorVector;					
-		if (!DataToDoubleVector(theElement, &aFactorVector) && (aFactorVector.size() == 4))
+		// 豆包修复：原逻辑用 &&（转换失败且数量恰为 4 才失败）是反的，
+		// 转换失败或数量不足 4 时仍会越界访问 aFactorVector[0..3]。
+		if (!DataToDoubleVector(theElement, &aFactorVector) || (aFactorVector.size() != 4))
 			return false;
 
 		theColor = Color(
@@ -1073,8 +1075,6 @@ bool FontData::Load(SexyAppBase* theSexyApp, const std::string& theFontDescFileN
 	if (mInitialized)
 		return false;
 
-	bool hasErrors = false;	
-
 	mApp = theSexyApp;
 	mCurrentLine = "";
 
@@ -1082,9 +1082,11 @@ bool FontData::Load(SexyAppBase* theSexyApp, const std::string& theFontDescFileN
 	
 	mSourceFile = theFontDescFileName;	
 
-	mInitialized = LoadDescriptor(theFontDescFileName);	;
+	// 豆包修复：正确传播加载失败状态（原实现中 hasErrors 从未被赋值，
+	// 即使 LoadDescriptor 失败也会返回 true，错误被上层吞掉）
+	mInitialized = LoadDescriptor(theFontDescFileName);
 
-	return !hasErrors;
+	return mInitialized;
 }
 
 bool FontData::LoadLegacy(Image* theFontImage, const std::string& theFontDescFileName)

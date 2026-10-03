@@ -1021,7 +1021,9 @@ void LawnApp::Shutdown()
 			mReanimatorCache = nullptr;
 		}
 
+#ifdef _HAS_ZOMBATAR
 		DisposeZombatarClothesCache();
+#endif
 		FilterEffectDisposeForApp();
 		TodParticleFreeDefinitions();
 		ReanimatorFreeDefinitions();

@@ -59,7 +59,12 @@
   - **SDL3 / SDL3_ttf**（图形与字体）、**FFmpeg**（avcodec/avformat/avutil/swresample/swscale，视频播放）、**Bass**（音频）、**PortAudio**（麦克风）、**tinyfiledialogs64**（原生对话框）。
 - 若这些 DLL 损坏或缺失，从本仓库重新下载 `bin\` 覆盖即可。
 
-> ⚠️ **Git LFS**：本仓库的 `bin\x64\`、`bin\x86\` 下的 DLL 使用 **Git LFS（大文件存储）** 管理。克隆/下载时请先安装并启用 [Git LFS](https://git-lfs.com/)（`git lfs install`，再 `git lfs pull` 或普通 `git clone`），否则这些 DLL 会以 LFS 指针文件形式出现、无法直接运行游戏。
+> ⚠️ **Git LFS（必须）**：本仓库的 `bin\x64\`、`bin\x86\` 下的 DLL 使用 **Git LFS（大文件存储）** 管理（见 `.gitattributes`）。首次克隆前请安装 [Git LFS](https://git-lfs.com/) 并执行：
+> ```bat
+> git lfs install
+> git lfs pull
+> ```
+> 否则这些 DLL 会以 1KB 的 LFS 指针文件形式出现，编译可能成功但运行时会报"找不到 DLL"。
 
 ### PAK 工具（可选，用于研究 / 复现修改）
 - [Pistonight/pvz-bintools](https://github.com/Pistonight/pvz-bintools)：
@@ -85,10 +90,10 @@
   | 平台 | Debug / Release（非 GOTY 名） | DebugGOTY / ReleaseGOTY |
   |---|---|---|
   | **Win32**（x86） | 编译为 **OG（2009 原版）** | 编译为 **GOTY（年度版）** |
-  | **x64** | 编译为 **GOTY（年度版）** | 编译为 **GOTY（年度版）** |
+  | **x64** | 编译为 **OG（2009 原版）** | 编译为 **GOTY（年度版）** |
 
-  > ⚠️ 这是上游 Fork 的既定行为：**x64 配置无论名字都编译为 GOTY**（工程里带 `_GOTY` 宏），Win32 下才区分 OG / GOTY。本 Fork 不修改这一点——因为中文年度版的内容（成就、生存、Last Stand）依赖 GOTY 宏。
-- **玩中文年度版推荐：`Release` + `x64`**（已是 GOTY，且为优化发布版）。
+  > ✅ 本 Fork 已修正上游"x64 配置误带 `_GOTY` 宏"的问题：现在 **Debug/Release（含 x64）= OG**、**DebugGOTY/ReleaseGOTY（含 x64）= GOTY**，配置名与实际版本完全一致（8 个配置已在 `SexyAppBase.vcxproj` 中核实）。
+- **玩中文年度版推荐：`ReleaseGOTY` + `x64`**（GOTY 内容依赖 `_GOTY` 宏，且为优化发布版）。中文年度版的成就、生存模式、Last Stand 等内容依赖 GOTY 宏，因此必须用 GOTY 配置（`DebugGOTY` / `ReleaseGOTY`）构建，用非 GOTY 配置会缺失这些内容。
 - 平台：`x64`（更优性能）或 `Win32`（兼容旧设备）。
 
 ### 3.（可选）修改功能开关
@@ -106,7 +111,26 @@
 - **改 `assets\` 里的文件会自动同步到输出目录**（但删除 `assets\` 里的文件不会同步删除，需手动清理 `build\...\bin\`）。
 
 ### 5. 运行中文年度版
-把中文年度版的 `main.pak` 放到输出目录（覆盖 PostBuildEvent 复制进来的英文版），保持 `dependency.pak`、`videos\intro.mp4` 为本仓库修改后的版本，直接运行 `PlantsVsZombies.exe` 即可看到完整中文界面。
+> ⚠️ **重要说明**：本 Fork 的 EXE **原生支持**中文年度版 PAK，但**仓库里不包含任何游戏数据**。`main.pak` 是 PopCap 的受版权保护数据，**必须由用户自己提供**——构建产物默认从你的游戏目录复制的是英文版 `main.pak`，并不会自动变成中文版。
+
+1. 准备一份《植物大战僵尸》中文年度版（2012 年度中文版）的完整游戏数据，取出其中的 `main.pak`。
+2. 把中文年度版的 `main.pak` 放到输出目录（覆盖 PostBuildEvent 复制进来的英文版），保持 `dependency.pak`、`videos\intro.mp4` 为本仓库修改后的版本。
+3. 直接运行 `PlantsVsZombies.exe` 即可看到完整中文界面。
+
+---
+
+## GitHub Actions 云编译（CI）
+
+本仓库已配置 `.github/workflows/build.yml`，每次 push 到 `master` 或手动触发时，会在 GitHub 的 Windows 云主机上自动执行 **4 个 Release 配置的干净构建**：
+
+- `Release | Win32`（OG / x86）
+- `Release | x64`（OG / x64）
+- `ReleaseGOTY | Win32`（GOTY / x86）
+- `ReleaseGOTY | x64`（GOTY / x64）
+
+CI 流程：`git lfs pull` 拉取 DLL → 安装 VS2022 Build Tools（MSVC v143 + Windows SDK）→ MSBuild 全量构建 → 校验产物（EXE、必要 DLL、`dependency.pak`、`properties`）。
+
+> CI 环境**不包含游戏本体**（`main.pak` 等版权数据不会进入仓库或 CI），因此 PostBuild 已做保护：游戏目录不存在时跳过 `.pak` 复制，编译仍可通过；输出目录里不会出现 `main.pak`，运行仍需按上文第 5 节自行放入中文年度版 `main.pak`。
 
 ---
 

@@ -161,20 +161,11 @@ int	SysFont::StringWidth(const SexyString& theString)
 	HFONT anOldFont = (HFONT)::SelectObject(aDC, mHFont);
 	int aWidth = 0;
 
-#ifdef _USE_WIDE_STRING
-	if (CheckFor98Mill())
-	{
-		SIZE aSize = { 0, 0 };
-		GetTextExtentPoint32W(aDC, theString.c_str(), theString.length(), &aSize);
-		aWidth = int(aSize.cx);
-	}
-	else
-#endif
-	{
-		RECT aRect = {0, 0, 0, 0};	
-		DrawTextEx(aDC, (SexyChar*)theString.c_str(), theString.length(), &aRect, DT_CALCRECT | DT_NOPREFIX, NULL);
-		aWidth = aRect.right;
-	}
+	// 转成 UTF-16 后交给 GDI 测量，保证中文等非 ASCII 字符宽度正确
+	std::wstring aW = Sexy::StringToWString(theString);
+	RECT aRect = {0, 0, 0, 0};	
+	DrawTextExW(aDC, (LPWSTR)aW.c_str(), (int)aW.length(), &aRect, DT_CALCRECT | DT_NOPREFIX, NULL);
+	aWidth = aRect.right;
 
 	::SelectObject(aDC, anOldFont);
 	::ReleaseDC(mApp->mHWnd, aDC);
@@ -185,6 +176,8 @@ int	SysFont::StringWidth(const SexyString& theString)
 void SysFont::DrawString(Graphics* g, int theX, int theY, const SexyString& theString, const Color& theColor, const Rect& theClipRect)
 {
 	DDImage* aDDImage = dynamic_cast<DDImage*>(g->mDestImage);
+	// 转成 UTF-16 后交给 GDI 绘制，保证中文等非 ASCII 字符正确显示
+	std::wstring aW = Sexy::StringToWString(theString);
 
 	if (aDDImage != NULL)
 	{
@@ -208,14 +201,14 @@ void SysFont::DrawString(Graphics* g, int theX, int theY, const SexyString& theS
 				if (mDrawShadow)
 				{
 					SetTextColor(aDC, RGB(0,0,0));
-					TextOut(aDC, theX + g->mTransX+1, theY - mAscent + 1 + g->mTransY+1, theString.c_str(), theString.length());
+					TextOutW(aDC, theX + g->mTransX+1, theY - mAscent + 1 + g->mTransY+1, aW.c_str(), (int)aW.length());
 					if (mSimulateBold)
-						TextOut(aDC, theX + g->mTransX+2, theY - mAscent + 1 + g->mTransY+1, theString.c_str(), theString.length());
+						TextOutW(aDC, theX + g->mTransX+2, theY - mAscent + 1 + g->mTransY+1, aW.c_str(), (int)aW.length());
 				}
 				SetTextColor(aDC, RGB(theColor.GetRed(), theColor.GetGreen(), theColor.GetBlue()));
-				TextOut(aDC, theX + g->mTransX, theY - mAscent + 1 + g->mTransY, theString.c_str(), theString.length());
+				TextOutW(aDC, theX + g->mTransX, theY - mAscent + 1 + g->mTransY, aW.c_str(), (int)aW.length());
 				if (mSimulateBold)
-					TextOut(aDC, theX + g->mTransX + 1, theY - mAscent + 1 + g->mTransY, theString.c_str(), theString.length());
+					TextOutW(aDC, theX + g->mTransX + 1, theY - mAscent + 1 + g->mTransY, aW.c_str(), (int)aW.length());
 
 				::SelectObject(aDC, anOldFont);
 				aSurface->ReleaseDC(aDC);
@@ -259,14 +252,14 @@ void SysFont::DrawString(Graphics* g, int theX, int theY, const SexyString& theS
 			if (mDrawShadow)																		\
 			{																						\
 				SetTextColor(aDC, RGB(0,0,0));														\
-				TextOut(aDC, 1, 1, theString.c_str(), theString.length());							\
+				TextOutW(aDC, 1, 1, aW.c_str(), (int)aW.length());							\
 				if (mSimulateBold)																	\
-					TextOut(aDC, 2, 1, theString.c_str(), theString.length());						\
+					TextOutW(aDC, 2, 1, aW.c_str(), (int)aW.length());						\
 			}																						\
 			SetTextColor(aDC, RGB(theColor.GetRed(), theColor.GetGreen(), theColor.GetBlue()));		\
-			TextOut(aDC, 0, 0, theString.c_str(), theString.length());								\
+			TextOutW(aDC, 0, 0, aW.c_str(), (int)aW.length());								\
 			if (mSimulateBold)																		\
-				TextOut(aDC, 1, 0, theString.c_str(), theString.length());							\
+				TextOutW(aDC, 1, 0, aW.c_str(), (int)aW.length());							\
 																									\
 			SelectObject(aDC, oldBmp);																\
 		}

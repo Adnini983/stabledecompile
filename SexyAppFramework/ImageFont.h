@@ -5,6 +5,9 @@
 #include "DescParser.h"
 #include "SharedImage.h"
 
+#include <map>
+#include <cstdint>
+
 namespace Sexy
 {
 
@@ -22,6 +25,8 @@ public:
 
 public:
 	CharData();
+	// 仅对单字节字符（0..255）有效的内距查询，超出范围返回 0，避免对 UTF-8 多字节码点越界
+	int						GetKerningOffset(uint32_t theNextCodePoint) const;
 };
 
 class FontData;
@@ -32,7 +37,7 @@ public:
 	FontData*				mFontData;
 	StringVector			mRequiredTags;
 	StringVector			mExcludedTags;	
-	CharData				mCharData[256];	
+	std::map<uint32_t, CharData> mCharData;		// 以 Unicode 码点为键的字形表（支持中文等多字节字符）
 	Color					mColorMult;
 	Color					mColorAdd;
 	SharedImageRef			mImage;	
@@ -52,7 +57,7 @@ public:
 public:
 	FontLayer(FontData* theFontData);
 	FontLayer(const FontLayer& theFontLayer);
-	CharData* GetCharData(SexyChar value);
+	CharData* GetCharData(uint32_t value);
 };
 
 typedef std::list<FontLayer> FontLayerList;
@@ -67,7 +72,7 @@ public:
 	SexyAppBase*			mApp;		
 
 	int						mDefaultPointSize;
-	uchar					mCharMap[256];	
+	std::map<uint32_t, uint32_t> mCharMap;		// 以码点为键的字符重映射表（缺省即恒等映射）
 	FontLayerList			mFontLayerList;
 	FontLayerMap			mFontLayerMap;
 
@@ -80,6 +85,8 @@ public:
 	bool					GetColorFromDataElement(DataElement *theElement, Color &theColor);
 	bool					DataToLayer(DataElement* theSource, FontLayer** theFontLayer);
 	virtual bool			HandleCommand(const ListDataElement& theParams);
+	// 查询重映射后的码点；未定义映射时返回原码点
+	uint32_t				MapChar(uint32_t theCodePoint) const;
 
 public:
 	FontData();
@@ -99,7 +106,7 @@ public:
 
 	Image*					mScaledImage;
 	bool					mOwnsImage;
-	Rect					mScaledCharImageRects[256];
+	std::map<uint32_t, Rect> mScaledCharImageRects;		// 以码点为键的缩放字形矩形表
 
 public:
 	ActiveFontLayer();
@@ -137,7 +144,7 @@ public:
 public:
 	virtual void			GenerateActiveFontLayers();
 	virtual void			DrawStringEx(Graphics* g, int theX, int theY, const SexyString& theString, const Color& theColor, const Rect* theClipRect, RectList* theDrawnAreas, int* theWidth);
-	SexyChar GetMappedChar(char value);
+	uint32_t GetMappedChar(uint32_t value);
 
 public:
 	ImageFont(SexyAppBase* theSexyApp, const std::string& theFontDescFileName);
@@ -149,8 +156,8 @@ public:
 	ImageFont(Image* theFontImage, const std::string& theFontDescFileName);
 	//ImageFont(const ImageFont& theImageFont, Image* theImage);
 	
-	virtual int				CharWidth(char theChar);
-	virtual int				CharWidthKern(char theChar, char thePrevChar);
+	virtual int				CharWidth(uint32_t theChar);
+	virtual int				CharWidthKern(uint32_t theChar, uint32_t thePrevChar);
 	virtual int				StringWidth(const SexyString& theString);
 	virtual void			DrawString(Graphics* g, int theX, int theY, const SexyString& theString, const Color& theColor, const Rect& theClipRect);
 

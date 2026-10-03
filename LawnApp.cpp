@@ -365,19 +365,11 @@ void LawnApp::MakeWindow()
 		mFullScreenWindow = false;
 	}
 
-#define _WIDE_SCREEN
-#ifdef _ULTRA_WIDESCREEN
-	mWidth = 1280;
-	mHeight = 720;
-
-	mDDInterface->mWideScreenOffsetX = 240;
-	mDDInterface->mWideScreenOffsetY = 60;
-#elif defined(_WIDE_SCREEN)
-	mWidth = 1066;
-	mHeight = 600;
-
-	mDDInterface->mWideScreenOffsetX = 133;
-#endif
+	// 中文年度版 PAK 仅按 4:3 分辨率设计；关闭宽屏，强制使用经典 4:3 布局（800x600）
+	mWidth = BOARD_WIDTH;
+	mHeight = BOARD_HEIGHT;
+	mDDInterface->mWideScreenOffsetX = 0;
+	mDDInterface->mWideScreenOffsetY = 0;
 
 	gBoardBounds = Rect{ 0, 0, mWidth, mHeight };
 

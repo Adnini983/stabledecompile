@@ -401,8 +401,14 @@ bool DescParser::ParseToList(const std::string& theString, ListDataElement* theL
 
 bool DescParser::ParseDescriptorLine(const std::string& theDescriptorLine)
 {
+	// 剥离行首 UTF-8 BOM（EF BB BF），避免被当作命令 token 的一部分导致解析失败
+	std::string aLine = theDescriptorLine;
+	if ((aLine.size() >= 3) && ((unsigned char)aLine[0] == 0xEF) &&
+		((unsigned char)aLine[1] == 0xBB) && ((unsigned char)aLine[2] == 0xBF))
+		aLine.erase(0, 3);
+
 	ListDataElement aParams;
-	if (!ParseToList(theDescriptorLine, &aParams, false, NULL))
+	if (!ParseToList(aLine, &aParams, false, NULL))
 		return false;
 	
 	if (aParams.mElementVector.size() > 0)

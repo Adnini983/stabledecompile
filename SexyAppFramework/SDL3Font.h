@@ -61,8 +61,8 @@ namespace Sexy
 		virtual int GetLineSpacingOffset();
 		virtual int GetLineSpacing();
 
-		virtual int CharWidth(SexyChar theChar);
-		virtual int CharWidthKern(SexyChar theChar, SexyChar thePrevChar);
+		virtual int CharWidth(uint32_t theChar);
+		virtual int CharWidthKern(uint32_t theChar, uint32_t thePrevChar);
 
 		void		Rebuild();
 		float		GetRelativeScale();

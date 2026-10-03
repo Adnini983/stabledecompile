@@ -268,7 +268,8 @@ bool EditWidget::IsPartOfWord(SexyChar theChar)
 	return (((theChar >= _S('A')) && (theChar <= _S('Z'))) ||
 			((theChar >= _S('a')) && (theChar <= _S('z'))) ||
 			((theChar >= _S('0')) && (theChar <= _S('9'))) ||
-			(((unsigned int)theChar >= (unsigned int)(L'�')) && ((unsigned int)theChar <= (unsigned int)(L'�'))) ||
+			// 窄字符 UTF-8 构建下，任何非 ASCII 字节都视为单词的一部分（含中文等多字节字符）
+			((unsigned char)theChar >= 0x80) ||
 			(theChar == _S('_')));
 }
 

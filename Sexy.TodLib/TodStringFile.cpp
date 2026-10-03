@@ -132,6 +132,56 @@ bool TodStringListReadItems(const SexyChar* theFileText)
 }
 
 //0x519240
+// 将一段 UTF-16 码元序列（little/big endian，不含 BOM）转换为 UTF-8 字符串。
+static std::string TodStringUtf16ToUtf8(const unsigned char* aData, int aDataLen, bool bigEndian)
+{
+	std::string aUtf8;
+	aUtf8.reserve(aDataLen);
+	for (int i = 0; i + 1 < aDataLen; i += 2)
+	{
+		unsigned int aUnit = bigEndian ?
+			(((unsigned int)aData[i]) << 8) | (unsigned int)aData[i + 1] :
+			((unsigned int)aData[i]) | (((unsigned int)aData[i + 1]) << 8);
+
+		// 处理代理对（surrogate pair），合并为单个码点
+		unsigned int aCodePoint = aUnit;
+		if ((aUnit >= 0xD800) && (aUnit <= 0xDBFF) && (i + 3 < aDataLen))
+		{
+			unsigned int aLow = bigEndian ?
+				(((unsigned int)aData[i + 2]) << 8) | (unsigned int)aData[i + 3] :
+				((unsigned int)aData[i + 2]) | (((unsigned int)aData[i + 3]) << 8);
+			if ((aLow >= 0xDC00) && (aLow <= 0xDFFF))
+			{
+				aCodePoint = 0x10000 + ((aUnit - 0xD800) << 10) + (aLow - 0xDC00);
+				i += 2;
+			}
+		}
+
+		// 编码为 UTF-8
+		if (aCodePoint < 0x80)
+			aUtf8 += (char)aCodePoint;
+		else if (aCodePoint < 0x800)
+		{
+			aUtf8 += (char)(0xC0 | (aCodePoint >> 6));
+			aUtf8 += (char)(0x80 | (aCodePoint & 0x3F));
+		}
+		else if (aCodePoint < 0x10000)
+		{
+			aUtf8 += (char)(0xE0 | (aCodePoint >> 12));
+			aUtf8 += (char)(0x80 | ((aCodePoint >> 6) & 0x3F));
+			aUtf8 += (char)(0x80 | (aCodePoint & 0x3F));
+		}
+		else
+		{
+			aUtf8 += (char)(0xF0 | (aCodePoint >> 18));
+			aUtf8 += (char)(0x80 | ((aCodePoint >> 12) & 0x3F));
+			aUtf8 += (char)(0x80 | ((aCodePoint >> 6) & 0x3F));
+			aUtf8 += (char)(0x80 | (aCodePoint & 0x3F));
+		}
+	}
+	return aUtf8;
+}
+
 bool TodStringListReadFile(const SexyChar* theFileName)
 {
 	PFILE* pFile = p_fopen(theFileName, _S("rb"));
@@ -152,8 +202,25 @@ bool TodStringListReadFile(const SexyChar* theFileName)
 		aSuccess = false;
 	}
 	aFileText[aSize] = '\0';
+
 	if (aSuccess)
 	{
+		// 中文年度版把文本文件存成 UTF-16（带 BOM），此处自动转换到 UTF-8 再解析
+		if ((aSize >= 2) && ((unsigned char)aFileText[0] == 0xFF) && ((unsigned char)aFileText[1] == 0xFE))
+		{
+			std::string aUtf8 = TodStringUtf16ToUtf8((const unsigned char*)aFileText + 2, aSize - 2, false);
+			delete[] aFileText;
+			aFileText = new SexyChar[aUtf8.size() + 1];
+			memcpy(aFileText, aUtf8.c_str(), aUtf8.size() + 1);
+		}
+		else if ((aSize >= 2) && ((unsigned char)aFileText[0] == 0xFE) && ((unsigned char)aFileText[1] == 0xFF))
+		{
+			std::string aUtf8 = TodStringUtf16ToUtf8((const unsigned char*)aFileText + 2, aSize - 2, true);
+			delete[] aFileText;
+			aFileText = new SexyChar[aUtf8.size() + 1];
+			memcpy(aFileText, aUtf8.c_str(), aUtf8.size() + 1);
+		}
+
 		aSuccess = TodStringListReadItems(aFileText);
 	}
 	p_fclose(pFile);  // 关闭文件流
@@ -356,13 +423,14 @@ int TodDrawStringWrappedHelper(Graphics* g, const SexyString& theText, const Rec
 	int aLineFeedPos = 0;
 	int aCurPos = 0;
 	int aCurWidth = 0;
-	SexyChar aCurChar = '\0';
-	SexyChar aPrevChar = '\0';
+	uint32_t aCurChar = 0;
+	uint32_t aPrevChar = 0;
 	int aSpacePos = -1;
 	int aMaxWidth = 0;
 	while (aCurPos < theText.size())
 	{
-		aCurChar = theText[aCurPos];
+		size_t aDecPos = aCurPos;
+		aCurChar = Sexy::Utf8Decode(theText, aDecPos);
 		if (aCurChar == '{')  // 如果当前字符是特殊格式控制字符的起始标志（即“{”）
 		{
 #ifdef _USE_WIDE_STRING
@@ -388,7 +456,7 @@ int TodDrawStringWrappedHelper(Graphics* g, const SexyString& theText, const Rec
 				continue;
 			}
 		}
-		else if (CharIsSpaceInFormat(aCurChar, aCurrentFormat))
+		else if (aCurChar < 256 && CharIsSpaceInFormat((SexyChar)aCurChar, aCurrentFormat))
 		{
 			aSpacePos = aCurPos;
 			aCurChar = ' ';
@@ -397,7 +465,7 @@ int TodDrawStringWrappedHelper(Graphics* g, const SexyString& theText, const Rec
 		{
 			aSpacePos = aCurPos;
 			aCurWidth = theRect.mWidth + 1;
-			aCurPos++;
+			aCurPos = (int)aDecPos;
 		}
 
 		aCurWidth += (*aCurrentFormat.mNewFont)->CharWidthKern(aCurChar, aPrevChar);  // 当前宽度加上当前字符的宽度
@@ -466,7 +534,7 @@ int TodDrawStringWrappedHelper(Graphics* g, const SexyString& theText, const Rec
 		}
 		else  // 当前宽度未超过限制区域宽度时
 		{
-			aCurPos++;  // 继续下一个字符
+			aCurPos = (int)aDecPos;  // 继续下一个字符
 		}
 	}
 

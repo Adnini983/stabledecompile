@@ -5,6 +5,8 @@
 #include "Rect.h"
 #include "Color.h"
 
+#include <cstdint>
+
 namespace Sexy
 {
 
@@ -30,8 +32,8 @@ public:
 	virtual int				GetLineSpacingOffset();
 	virtual int				GetLineSpacing();
 	virtual int				StringWidth(const SexyString& theString);
-	virtual int				CharWidth(SexyChar theChar);
-	virtual int				CharWidthKern(SexyChar theChar, SexyChar thePrevChar);
+	virtual int				CharWidth(uint32_t theChar);
+	virtual int				CharWidthKern(uint32_t theChar, uint32_t thePrevChar);
 
 	virtual void			DrawString(Graphics* g, int theX, int theY, const SexyString& theString, const Color& theColor, const Rect& theClipRect);
 

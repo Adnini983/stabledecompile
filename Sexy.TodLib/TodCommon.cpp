@@ -393,13 +393,15 @@ void TodDrawStringMatrix(Graphics* g, const Font* theFont, const SexyMatrix3& th
 	aFont->Prepare();
 	int aCurXPos = 0;
 	int aCurPoolIdx = 0;
-	for (int aCharNum = 0; aCharNum < (int)aFinalString.size(); aCharNum++)
+	std::vector<uint32_t> aCps;
+	Sexy::Utf8ToCodePoints(aFinalString, aCps);
+	for (int aCharNum = 0; aCharNum < (int)aCps.size(); aCharNum++)
 	{
-		SexyChar aChar = aFont->GetMappedChar(aFinalString[aCharNum]);
-		SexyChar aNextChar = '\0';
-		if (aCharNum < (int)aFinalString.size() - 1)
+		uint32_t aChar = aFont->GetMappedChar(aCps[aCharNum]);
+		uint32_t aNextChar = 0;
+		if (aCharNum < (int)aCps.size() - 1)
 		{
-			aNextChar = aFont->GetMappedChar(aFinalString[aCharNum + 1]);
+			aNextChar = aFont->GetMappedChar(aCps[aCharNum + 1]);
 		}
 		int aMaxXPos = aCurXPos;
 		int aLayerCount = 0;
@@ -429,7 +431,7 @@ void TodDrawStringMatrix(Graphics* g, const Font* theFont, const SexyMatrix3& th
 				{
 					aSpacing = aLayer->mSpacing;
 
-					aSpacing += aCharData->mKerningOffsets[aNextChar];
+					aSpacing += aCharData->GetKerningOffset(aNextChar);
 
 				}
 			}
@@ -447,7 +449,7 @@ void TodDrawStringMatrix(Graphics* g, const Font* theFont, const SexyMatrix3& th
 				{
 					aSpacing = aLayer->mSpacing;
 
-					aSpacing += aCharData->mKerningOffsets[aNextChar] * aScale;
+					aSpacing += aCharData->GetKerningOffset(aNextChar) * aScale;
 
 				}
 			}

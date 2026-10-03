@@ -11,6 +11,7 @@
 #include <list>
 #include <algorithm>
 #include <cstdlib>
+#include <cstdint>
 
 #include <windows.h>
 #include <shellapi.h> 
@@ -164,6 +165,10 @@ SexyString			StringToSexyString(const std::string& theString);
 SexyString			WStringToSexyString(const std::wstring& theString);
 std::string			SexyStringToString(const SexyString& theString);
 std::wstring		SexyStringToWString(const SexyString& theString);
+// 解码 s[pos] 处的一个 UTF-8 码点并推进 pos，返回该码点（非法字节按 0xFFFD 处理）
+uint32_t			Utf8Decode(const std::string& s, size_t& pos);
+// 把整个 UTF-8 字符串解码为码点序列（返回码点个数，输出到 theOut 中）
+size_t				Utf8ToCodePoints(const std::string& s, std::vector<uint32_t>& theOut);
 std::string			Upper(const std::string& theData);
 std::wstring		Upper(const std::wstring& theData);
 std::string			Lower(const std::string& theData);

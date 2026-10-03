@@ -1392,8 +1392,8 @@ int	Graphics::WriteWordWrapped(const Rect& theRect, const SexyString& theLine, i
 	ulong aCurPos = 0;
 	int aLineStartPos = 0;
 	int aCurWidth = 0;
-	SexyChar aCurChar = 0;
-	SexyChar aPrevChar = 0;
+	uint32_t aCurChar = 0;
+	uint32_t aPrevChar = 0;
 	int aSpacePos = -1;
 	int aMaxWidth = 0;
 	int anIndentX = 0;
@@ -1406,7 +1406,8 @@ int	Graphics::WriteWordWrapped(const Rect& theRect, const SexyString& theLine, i
 
 	while (aCurPos < theLine.length())
 	{	
-		aCurChar = theLine[aCurPos];
+		size_t aDecPos = aCurPos;
+		aCurChar = Sexy::Utf8Decode(theLine, aDecPos);
 		if(aCurChar==_S('^') && mWriteColoredString) // Handle special color modifier
 		{
 			if(aCurPos+1<theLine.length())
@@ -1426,7 +1427,7 @@ int	Graphics::WriteWordWrapped(const Rect& theRect, const SexyString& theLine, i
 		{
 			aCurWidth = theRect.mWidth+1; // force word wrap
 			aSpacePos = aCurPos;
-			aCurPos++; // skip enter on next go round
+			aCurPos = aDecPos; // skip enter on next go round
 		}
 
 		aCurWidth += aFont->CharWidthKern(aCurChar, aPrevChar);
@@ -1491,7 +1492,7 @@ int	Graphics::WriteWordWrapped(const Rect& theRect, const SexyString& theLine, i
 			aYOffset += theLineSpacing;
 		}
 		else
-			aCurPos++;
+			aCurPos = aDecPos;
 	}
 
 	if(aLineStartPos<(int)theLine.length()) // write the last piece

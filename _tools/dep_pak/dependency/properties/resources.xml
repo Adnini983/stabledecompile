@@ -1,0 +1,220 @@
+<?xml version="1.0"?>
+<ResourceManifest>
+    <Resources id="Init">
+        <SetDefaults path="dependency/images" idprefix="IMAGE_" />
+        <Image id="POPCAP_LOGO" path="PopCap_Logo" />
+    </Resources>
+    <Resources id="LoadingImages">
+        <SetDefaults path="dependency/images" idprefix="IMAGE_" />
+        <Image id="COBCANNON_TARGET_SHADOW" path="CobCannon_target_shadow" />
+        <Image id="LENSEFLARE" path="LenseFlare" />
+        <Image id="LENSEFLARE2" path="LenseFlare2" />
+        <Image id="LENSEFLARE3" path="LenseFlare3" />    
+        <Image id="LENSEFLARE4" path="LenseFlare4" />
+        <Image id="LENSEFLARE5" path="LenseFlare5" />    
+        <Image id="LENSEFLARE6" path="LenseFlare6" />    
+        <Image id="LENSEFLARE7" path="LenseFlare7" /> 
+        <Image id="GOOGLYEYE" path="googlyeye" />
+        <Image id="PROPELLER" path="propeller" />
+        <Image id="BEEHIVE" path="beehive" cols="10" />
+        <Image id="STINGER" path="stinger" cols="10" />
+        <Image id="CHERRYBOMB" path="cherrybomb" cols="10" />
+        <Image id="ICEBERG" path="iceberglettuce" cols="10" />
+        <Image id="DUPLICATOR" path="duplicator" cols="10" />
+        <Image id="YAMPOLINE" path="yampoline" cols="10" />
+        <Image id="NUKECUMBER" path="nukecumber" cols="10" />
+        <Image id="PROJECTILE" path="projectile" cols="10" rows="19"/>
+        <Image id="SELECTOR_MORE_BUTTON" path="selector_more_button" />
+        <Image id="SELECTOR_MORE_BUTTON_HIGHLIGHT" path="selector_more_button_highlight" />
+        <Image id="SELECTOR_MORE_SIGN" path="selector_more_sign" />
+        <Image id="QUICKPLAY_SIGN" path="quickplay_sign" />
+        <Image id="QUICKPLAY_SIGN_HIGHLIGHT" path="quickplay_sign_highlight" />
+        <Image id="SEEDPACKETUPGRADE_LARGER" path="SeedPacketUpgrade_Larger" />
+        <Image id="SEEDPACKETIMITATER_LARGER" path="SeedPacketImitater_Larger" />
+        <Image id="SEED_SELECTOR" path="seed_selector" />
+        <Image id="P1_ARROW" path="p1_arrow" />
+        <Image id="SQUIRREL" path="squirrel" />
+        <Image id="ZOMBIEDOG" path="zombiedog" cols="12" rows="2" />
+        <Image id="PROPELLERZOMBIE" path="propellerzombie" cols="12" rows="2" />
+        <Image id="ZOMBIE" path="zombie" cols="12" rows="15" />
+        <Image id="SCROLLBG" path="scrollBG"/>
+        <Image id="SCROLLOVERLAY" path="scrollOverlay"/>
+        <Image id="SELECTORSCREEN_ACHIEVEMENTS_BG" path="selectorscreen_achievements_bg" />
+        <Image id="SELECTORSCREEN_MOREWAYSTOPLAY_BG" path="selector_morewaystoplay_background" />
+        <Image id="PAUSE_BUTTON" path="pause_button" />
+        <Image id="PAUSE_BUTTON_PRESSED" path="pause_button_pressed" />
+        <Image id="SPEEDUP_BUTTON" path="speedup_button" />
+        <Image id="SPEEDUP_BUTTON_PRESSED" path="speedup_button_pressed" />
+        <Image id="SLOWDOWN_BUTTON" path="slowdown_button" />
+        <Image id="SLOWDOWN_BUTTON_PRESSED" path="slowdown_button_pressed" />
+        <Image id="NIGHT_GRAVE_GRAPHIC" path="Night_grave_graphic" />
+        <Image id="UNLOCK_BUTTON" path="Unlock_Normal" />
+        <Image id="UNLOCK_BUTTON_HIGHLIGHT" path="Unlock_Highlight" />
+        <Image id="UNLOCK_BUTTON_PRESSED" path="Unlock_Press" />
+        <Image id="BOMB_INDICATOR" path="Bomb_indicator"/>
+        <Image id="STRIPECROWS" path="stripescrowws"/>
+        <Image id="CAGEICON" path="cageicon"/>
+        <Image id="ZOMBIEMETALGEAR" path="zombiemetalgear"/>
+
+        <SetDefaults path="dependency/particles" idprefix="IMAGE_" /> 
+        <Image id="ZOMBIE_FLAGPOLE1" path="Zombie_flagpole1" />
+        <Image id="ZOMBIE_FLAGPOLE3" path="Zombie_flagpole3" /> 
+        <Image id="SPIKE_PARTICLES" path="Spike_particles" cols="3" />
+        <Image id="SPIKE_SPLATS" path="Spike_splats" cols="4" /> 
+        <Image id="ZOMBIENEWSPAPERHEAD" path="ZombieNewspaperHead" />
+        <Image id="ZOMBIENEWSPAPERMADHEAD" path="ZombieNewspaperMadHead" />
+        <Image id="ZOMBIEJACKBOXHEAD" path="ZombieJackboxHead" />
+        <Image id="ZOMBIESNORKLEARM" path="ZombieSnorkleArm" />
+        <Image id="ZOMBIEPOLE" path="zombiepole" />
+        <Image id="ZOMBIEDANCERHEAD" path="ZombieDancerHead_disco" />
+        <Image id="ZOMBIEBACKUPDANCERHEAD" path="ZombieBackupDancerHead_disco" />
+
+        <SetDefaults path="dependency/reanim" idprefix="IMAGE_REANIM_" />
+        <Image id="ZOMBIE_BOSS_RV2" path="Zombie_boss_rv2" />
+        <Image id="ZOMBIE_DANCER_INNERARM_HAND" path="Zombie_dancer_innerarm_hand" />
+        <Image id="ZOMBIE_BLACK_FOOTBALL_HELMET" path="Zombie_black_football_helmet" />
+        <Image id="ZOMBIE_BLACK_FOOTBALL_HELMET2" path="Zombie_black_football_helmet2" />
+        <Image id="ZOMBIE_BLACK_FOOTBALL_HELMET3" path="Zombie_black_football_helmet3" />
+        <Image id="ZOMBIE_TRASHCAN1" path="Zombie_trashcan1" />
+        <Image id="ZOMBIE_TRASHCAN2" path="Zombie_trashcan2" />
+        <Image id="ZOMBIE_TRASHCAN3" path="Zombie_trashcan3" />
+        <Image id="ZOMBIE_JACKSON_OUTERARM_HAND" path="Zombie_Jackson_outerarm_hand" />
+        <Image id="ZOMBIE_JACKSON_OUTERARM_UPPER2" path="Zombie_Jackson_outerarm_upper2" />
+        <Image id="PEASHOOTER_MOUTH_EXHAUSTED" path="PeaShooter_mouth_exhausted" />
+        <Image id="PEASHOOTER_HEAD_EXHAUSTED" path="PeaShooter_head_exhausted" />
+        <Image id="PEASHOOTER_STALK_TOP_EXHAUSTED" path="PeaShooter_stalk_top_exhausted" />
+        <Image id="PEASHOOTER_STALK_BOTTOM_EXHAUSTED" path="PeaShooter_stalk_bottom_exhausted" />
+        <Image id="PEASHOOTER_SPROUT_EXHAUSTED" path="PeaShooter_sprout_exhausted" />
+        <Image id="PEASHOOTER_FRONTLEAF_RIGHTTIP_EXHAUSTED" path="PeaShooter_frontleaf_righttip_exhausted" />
+        <Image id="PEASHOOTER_FRONTLEAF_LEFTTIP_EXHAUSTED" path="PeaShooter_frontleaf_lefttip_exhausted" />
+        <Image id="PEASHOOTER_BACKLEAF_LEFTTIP_EXHAUSTED" path="PeaShooter_backleaf_lefttip_exhausted" />
+        <Image id="PEASHOOTER_BACKLEAF_EXHAUSTED" path="PeaShooter_backleaf_exhausted" />
+        <Image id="PEASHOOTER_BACKLEAF_RIGHTTIP_EXHAUSTED" path="PeaShooter_backleaf_righttip_exhausted" />
+        <Image id="PEASHOOTER_FRONTLEAF_EXHAUSTED" path="PeaShooter_frontleaf_exhausted" />
+        <Image id="PEASHOOTER_MOUTH_EXHAUSTED2" path="PeaShooter_mouth_exhausted2" />
+        <Image id="PEASHOOTER_HEAD_EXHAUSTED2" path="PeaShooter_head_exhausted2" />
+        <Image id="PEASHOOTER_STALK_TOP_EXHAUSTED2" path="PeaShooter_stalk_top_exhausted2" />
+        <Image id="PEASHOOTER_STALK_BOTTOM_EXHAUSTED2" path="PeaShooter_stalk_bottom_exhausted2" />
+        <Image id="PEASHOOTER_SPROUT_EXHAUSTED2" path="PeaShooter_sprout_exhausted2" />
+        <Image id="PEASHOOTER_FRONTLEAF_RIGHTTIP_EXHAUSTED2" path="PeaShooter_frontleaf_righttip_exhausted2" />
+        <Image id="PEASHOOTER_FRONTLEAF_LEFTTIP_EXHAUSTED2" path="PeaShooter_frontleaf_lefttip_exhausted2" />
+        <Image id="PEASHOOTER_BACKLEAF_LEFTTIP_EXHAUSTED2" path="PeaShooter_backleaf_lefttip_exhausted2" />
+        <Image id="PEASHOOTER_BACKLEAF_EXHAUSTED2" path="PeaShooter_backleaf_exhausted2" />
+        <Image id="PEASHOOTER_BACKLEAF_RIGHTTIP_EXHAUSTED2" path="PeaShooter_backleaf_righttip_exhausted2" />
+        <Image id="PEASHOOTER_FRONTLEAF_EXHAUSTED2" path="PeaShooter_frontleaf_exhausted2" />
+        <Image id="PEASHOOTER_HEAD_POWERED" path="PeaShooter_head_powered" />
+        <Image id="PEASHOOTER_MOUTH_POWERED" path="PeaShooter_mouth_powered" />
+        <Image id="PEASHOOTER_SPROUT_POWERED" path="PeaShooter_sprout_powered" />
+    </Resources>
+    <Resources id="DelayLoad_Zombatar">
+        <SetDefaults path="dependency/images" idprefix="IMAGE_" />
+        <Image id="ZOMBATAR_DAY_GRAVE" path="zombatar_day_grave" />
+        <Image id="ZOMBATAR_MAINMENUBACK_PRESSED" path="zombatar_mainmenuback_pressed" />
+    </Resources>
+    <Resources id="DelayLoad_LevelSelector">
+        <SetDefaults path="dependency/images" idprefix="IMAGE_" />
+        <Image id="LEVELSELECTOR_DAY_BUTTON" path="levelselector_day_button" />
+        <Image id="LEVELSELECTOR_DAY_BUTTON_HIGHLIGHT" path="levelselector_day_button_highlight" />
+        <Image id="LEVELSELECTOR_DAY_BUTTON_PRESSED" path="levelselector_day_button_pressed" />
+        <Image id="LEVELSELECTOR_NIGHT_BUTTON" path="levelselector_night_button" />
+        <Image id="LEVELSELECTOR_NIGHT_BUTTON_HIGHLIGHT" path="levelselector_night_button_highlight" />
+        <Image id="LEVELSELECTOR_NIGHT_BUTTON_PRESSED" path="levelselector_night_button_pressed" />
+        <Image id="LEVELSELECTOR_POOL_BUTTON" path="levelselector_pool_button" />
+        <Image id="LEVELSELECTOR_POOL_BUTTON_HIGHLIGHT" path="levelselector_pool_button_highlight" />
+        <Image id="LEVELSELECTOR_POOL_BUTTON_PRESSED" path="levelselector_pool_button_pressed" />
+        <Image id="LEVELSELECTOR_FOG_BUTTON" path="levelselector_fog_button" />
+        <Image id="LEVELSELECTOR_FOG_BUTTON_HIGHLIGHT" path="levelselector_fog_button_highlight" />
+        <Image id="LEVELSELECTOR_FOG_BUTTON_PRESSED" path="levelselector_fog_button_pressed" />
+        <Image id="LEVELSELECTOR_ROOF_BUTTON" path="levelselector_roof_button" />
+        <Image id="LEVELSELECTOR_ROOF_BUTTON_HIGHLIGHT" path="levelselector_roof_button_highlight" />
+        <Image id="LEVELSELECTOR_ROOF_BUTTON_PRESSED" path="levelselector_roof_button_pressed" />
+        <Image id="LEVELSELECTOR_DAY_THUMBNAIL" path="levelselector_day_thumbnail" />
+        <Image id="LEVELSELECTOR_NIGHT_THUMBNAIL" path="levelselector_night_thumbnail" />
+        <Image id="LEVELSELECTOR_POOL_THUMBNAIL" path="levelselector_pool_thumbnail" />
+        <Image id="LEVELSELECTOR_FOG_THUMBNAIL" path="levelselector_fog_thumbnail" />
+        <Image id="LEVELSELECTOR_ROOF_THUMBNAIL" path="levelselector_roof_thumbnail" />
+        <Image id="LEVELSELECTOR_BOSS_THUMBNAIL" path="levelselector_boss_thumbnail" />
+        <Image id="LEVELSELECTOR_LEVEL_BUTTON" path="levelselector_level_button" />
+        <Image id="LEVELSELECTOR_LEVEL_BUTTON_HIGHLIGHT" path="levelselector_level_button_highlight" />
+        <Image id="RIP_LEVER_HOLDER" path="rip_lever_holder" />
+        <Image id="RIP_LEVER_STICK" path="rip_lever_stick" />
+        <Image id="RIP_LEVER_STICK_PRESSED" path="rip_lever_stick_pressed" />
+
+    </Resources>
+    <Resources id="DelayLoad_ChallengeScreen">
+        <SetDefaults path="dependency/images" idprefix="IMAGE_" />
+        <Image id="SURVIVAL_THUMBNAILS" path="Survival_Thumbnails" cols="15" />
+    </Resources>  
+    <Resources id="DelayLoad_Background1">
+        <SetDefaults path="dependency/images" idprefix="IMAGE_" />
+        <Image id="BACKGROUND1" path="background1"/>
+        <Image id="BACKGROUND1_COVER" path="background1_cover"/>
+    </Resources>
+    
+    <Resources id="DelayLoad_BackgroundUnsodded">
+        <SetDefaults path="dependency/images" idprefix="IMAGE_" />
+        <Image id="BACKGROUND1UNSODDED" path="background1unsodded"/>
+        <Image id="SOD1ROW" path="sod1row"/>
+        <Image id="SOD3ROW" path="sod3row"/>
+    </Resources>
+    
+    <Resources id="DelayLoad_Background2">
+        <SetDefaults path="dependency/images" idprefix="IMAGE_" />
+        <Image id="BACKGROUND2" path="background2"/>
+        <Image id="BACKGROUND2_COVER" path="background2_cover"/>
+    </Resources>
+    
+    <Resources id="DelayLoad_Background3">
+        <SetDefaults path="dependency/images" idprefix="IMAGE_" />
+        <Image id="BACKGROUND3" path="background3"/>
+        <Image id="BACKGROUND3_COVER" path="background3_cover"/>
+    </Resources>
+
+    <Resources id="DelayLoad_Background4">
+        <SetDefaults path="dependency/images" idprefix="IMAGE_" />
+        <Image id="BACKGROUND4" path="background4"/>
+        <Image id="BACKGROUND4_COVER" path="background4_cover"/>
+    </Resources>
+    
+    <Resources id="DelayLoad_Background5">
+        <SetDefaults path="dependency/images" idprefix="IMAGE_" />
+        <Image id="BACKGROUND5" path="background5"/>
+        <Image id="BACKGROUND5_GAMEOVER_MASK" path="background5_gameover_mask"/>
+        <Image id="POLE" path="pole"/>
+        <Image id="TREES" path="trees"/>
+    </Resources>
+    
+    <Resources id="DelayLoad_Background6">
+        <SetDefaults path="dependency/images" idprefix="IMAGE_" />
+        <Image id="BACKGROUND6" path="background6" ddsurface="" a8r8g8b8="" />
+        <Image id="BACKGROUND6BOSS" path="background6boss"/>
+        <Image id="BACKGROUND6_GAMEOVER_MASK" path="background6_gameover_mask"/>
+        <Image id="NIGHT_POLE" path="night_pole"/>
+        <Image id="NIGHT_TREES" path="night_trees"/>
+    </Resources>
+    
+    <Resources id="DelayLoad_MushroomGarden">
+        <SetDefaults path="dependency/images" idprefix="IMAGE_" />
+        <Image id="BACKGROUND_MUSHROOMGARDEN" path="Background_MushroomGarden" />
+    </Resources>
+
+    <Resources id="DelayLoad_GreenHouseGarden">
+        <SetDefaults path="dependency/images" idprefix="IMAGE_" />
+        <Image id="BACKGROUND_GREENHOUSE" path="Background_Greenhouse" />
+    </Resources>
+
+    <Resources id="DelayLoad_Zombiquarium">
+    <SetDefaults path="dependency/images" idprefix="IMAGE_" />
+    <Image id="AQUARIUM1" path="aquarium1" a8r8g8b8="" />
+    </Resources>  
+
+    <Resources id="DelayLoad_Zombatar">
+    <SetDefaults path="dependency/images" idprefix="IMAGE_" />
+        <Image id="ZOMBATAR_MAIN_BG" path="zombatar_main_bg"/>
+    </Resources>  
+
+    <Resources id="LoadingSounds">
+    <SetDefaults path="dependency/sounds" idprefix="SOUND_" />
+        <Sound id="REVERSE_WAKEUP" path="reverse_wakeup" />
+    </Resources>
+</ResourceManifest>

@@ -221,5 +221,5 @@ int	SDL3Font::GetDescent() { return TTF_GetFontDescent(mFont) / GetRelativeScale
 int	SDL3Font::GetHeight() { return TTF_GetFontHeight(mFont) / GetRelativeScale(); }
 int SDL3Font::GetLineSpacingOffset() { return GetHeight() + GetLineSpacing(); }
 int SDL3Font::GetLineSpacing() { return TTF_GetFontLineSkip(mFont) / GetRelativeScale(); }
-int SDL3Font::CharWidth(SexyChar theChar) { return mGlyphWidth[theChar] / GetRelativeScale(); }
-int SDL3Font::CharWidthKern(SexyChar theChar, SexyChar thePrevChar) { int kern; TTF_GetGlyphKerning(mFont, thePrevChar, theChar, &kern); return kern / GetRelativeScale(); }
+int SDL3Font::CharWidth(uint32_t theChar) { return mGlyphWidth[theChar] / GetRelativeScale(); }
+int SDL3Font::CharWidthKern(uint32_t theChar, uint32_t thePrevChar) { int kern; TTF_GetGlyphKerning(mFont, thePrevChar, theChar, &kern); return kern / GetRelativeScale(); }

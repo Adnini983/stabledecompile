@@ -211,40 +211,101 @@ std::wstring Sexy::StringToLower(const std::wstring& theString)
 
 std::wstring Sexy::StringToWString(const std::string& theString)
 {
+	// UTF-8 -> UTF-16 (lossless; ASCII narrow strings are unaffected since they are a subset of UTF-8)
+	if (theString.empty())
+		return std::wstring();
+	int aLen = MultiByteToWideChar(CP_UTF8, 0, theString.c_str(), (int)theString.size(), NULL, 0);
+	if (aLen <= 0)
+	{
+		// Fall back to a byte copy so malformed/narrow strings never get lost
+		std::wstring aString;
+		aString.reserve(theString.length());
+		for (size_t i = 0; i < theString.length(); ++i)
+			aString += (unsigned char)theString[i];
+		return aString;
+	}
 	std::wstring aString;
-	aString.reserve(theString.length());
-	for (size_t i = 0; i < theString.length(); ++i)
-		aString += (unsigned char)theString[i];
+	aString.resize(aLen);
+	MultiByteToWideChar(CP_UTF8, 0, theString.c_str(), (int)theString.size(), &aString[0], aLen);
 	return aString;
 }
-#include <string>
-#include <locale>
-#include <codecvt>
 std::string Sexy::WStringToString(const std::wstring& theString)
 {
-#ifdef _USE_WIDE_STRING
-	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-	return converter.to_bytes(theString);
-#else
-	size_t aRequiredLength = wcstombs(NULL, theString.c_str(), 0);
-	if (aRequiredLength < 16384)
+	// UTF-16 -> UTF-8 (lossless; ASCII is unaffected)
+	if (theString.empty())
+		return std::string();
+	int aLen = WideCharToMultiByte(CP_UTF8, 0, theString.c_str(), (int)theString.size(), NULL, 0, NULL, NULL);
+	if (aLen <= 0)
+		return std::string();
+	std::string aString;
+	aString.resize(aLen);
+	WideCharToMultiByte(CP_UTF8, 0, theString.c_str(), (int)theString.size(), &aString[0], aLen, NULL, NULL);
+	return aString;
+}
+
+uint32_t Sexy::Utf8Decode(const std::string& s, size_t& pos)
+{
+	unsigned char aByte = (unsigned char)s[pos];
+	uint32_t aCodePoint = 0;
+	int aExtra = 0;
+
+	if (aByte < 0x80)
 	{
-		char aBuffer[16384];
-		wcstombs(aBuffer, theString.c_str(), 16384);
-		return std::string(aBuffer);
+		aCodePoint = aByte;
+		pos += 1;
+		return aCodePoint;
+	}
+	else if ((aByte & 0xE0) == 0xC0)
+	{
+		aCodePoint = aByte & 0x1F;
+		aExtra = 1;
+	}
+	else if ((aByte & 0xF0) == 0xE0)
+	{
+		aCodePoint = aByte & 0x0F;
+		aExtra = 2;
+	}
+	else if ((aByte & 0xF8) == 0xF0)
+	{
+		aCodePoint = aByte & 0x07;
+		aExtra = 3;
 	}
 	else
 	{
-		DBG_ASSERTE(aRequiredLength != (size_t)-1);
-		if (aRequiredLength == (size_t)-1) return "";
+		pos += 1;
+		return 0xFFFD;
+	}
 
-		char* aBuffer = new char[aRequiredLength + 1];
-		wcstombs(aBuffer, theString.c_str(), aRequiredLength + 1);
-		std::string aStr = aBuffer;
-		delete[] aBuffer;
-		return aStr;
+	if (pos + aExtra >= s.size())
+	{
+		pos += 1;
+		return 0xFFFD;
+	}
+
+	for (int i = 1; i <= aExtra; i++)
+	{
+		unsigned char aNext = (unsigned char)s[pos + i];
+		if ((aNext & 0xC0) != 0x80)
+		{
+			pos += 1;
+			return 0xFFFD;
+		}
+		aCodePoint = (aCodePoint << 6) | (aNext & 0x3F);
+	}
+	pos += aExtra + 1;
+	return aCodePoint;
 }
-#endif
+
+size_t Sexy::Utf8ToCodePoints(const std::string& s, std::vector<uint32_t>& theOut)
+{
+	theOut.clear();
+	theOut.reserve(s.size());
+	size_t aPos = 0;
+	while (aPos < s.size())
+	{
+		theOut.push_back(Utf8Decode(s, aPos));
+	}
+	return theOut.size();
 }
 
 SexyString Sexy::StringToSexyString(const std::string& theString)

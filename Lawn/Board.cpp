@@ -1409,6 +1409,11 @@ const ReanimationType gReanimBushesType[] = {
 
 void Board::InitBushes() 
 {
+	// 豆包修复：彻底移除街道灌木丛。它们渲染在僵尸之上会遮挡出怪预览，
+	// 且 anim_rustle 动画自带沙沙穿越音效。这里不创建灌木，
+	// 裸地/阴影改用 dependency.pak 覆盖场地背景贴图来填充（见 assets 处理）。
+	return;
+
 	for (int i = 0; i < 6; i++) 
 	{
 		float posX = 0, posY = 0;
@@ -5845,14 +5850,16 @@ void Board::SpawnZombieWave()
 				if (isAllowedToAnimate && 
 					aZombie->mZombieType != ZombieType::ZOMBIE_BUNGEE && aZombie->mZombieType != ZombieType::ZOMBIE_DIGGER)
 				{
-					Reanimation* aBushReanim = mApp->ReanimationTryToGet(mBushesID[aZombie->mRow]);
+					// 豆包修复：不再触发灌木 anim_rustle 动画，从而关闭僵尸穿越灌木时的沙沙音效。
+					// 灌木保持静止帧，不发出任何声音。
+					/*Reanimation* aBushReanim = mApp->ReanimationTryToGet(mBushesID[aZombie->mRow]);
 					if (aBushReanim && aBushReanim->mLoopCount > 0)
 					{
 						aBushReanim->StartBlend(20);
 						aBushReanim->mLastFrameTime = 0.0f;
 						aBushReanim->mAnimTime = 0.0f;
 						aBushReanim->mLoopCount = 0;
-					}
+					}*/
 				}
 			}
 		}

@@ -324,6 +324,10 @@ bool LawnApp::PlayVideo(std::string url, bool isSkipable, Color bgColor)
 	}
 	
 	SDL_DestroyTexture(texture);
+	// 修复：无论视频正常播完还是按 ESC 跳过，都销毁 SDL 音频设备流，
+	// 避免它一直占用默认音频设备，导致随后初始化声音系统/加载 buttonclick 声音失败（FATAL ERROR）
+	if (audio_playback_stream != NULL)
+		SDL_DestroyAudioStream(audio_playback_stream);
 
 	mIsPlayingVideo = false;
 

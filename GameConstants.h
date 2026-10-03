@@ -29,10 +29,10 @@ const int           IMITATER_DIALOG_HEIGHT = 600;
 const int			WIDESCREEN_OFFSETX = -240;
 const int			WIDESCREEN_OFFSETY = -60;
 
-const int			STREET_ZOMBIE_START_X = 1030; // PC: 830 - Console : 1000
-const int			STREET_ZOMBIE_ROOF_START_X = 900;
+const int			STREET_ZOMBIE_START_X = 830; // PC: 830 - Console : 1000（豆包修复：改回 PC 值，避免非屋顶出怪预览在 4:3 下偏右显示不全）
+const int			STREET_ZOMBIE_ROOF_START_X = 830; // 豆包修复：屋顶出怪预览同样存在偏右显示不全的问题，随非屋顶一并左移（原 900）
 const int			STREET_ZOMBIE_START_Y = 70;
-const int			STREET_ZOMBIE_GRID_SIZE_X = 30; // PC : 56 - Console : 30
+const int			STREET_ZOMBIE_GRID_SIZE_X = 56; // PC : 56 - Console : 30（豆包修复：改回 PC 值，配合 STREET_ZOMBIE_START_X 铺满出怪预览场地）
 const int			STREET_ZOMBIE_GRID_SIZE_Y = 90;
 const int			STREET_ZOMBIE_ROOF_OFFSET = 30; // PC : 30 - Console : 15
 

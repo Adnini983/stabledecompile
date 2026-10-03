@@ -33,6 +33,11 @@
 
 > ⚠️ 原始 `main.pak` 从未被修改，测试均使用拷贝到 `build\...\bin` 下的副本。
 
+### 6. 修复开场视频音频流泄漏（解决 ESC 跳过与生存模式崩溃）
+- 根因：`LawnApp.cpp` 的 `PlayVideo()` 在播放开场 `intro.mp4` 时用 `SDL_OpenAudioDeviceStream` 创建音频流，但视频结束（无论播完还是按 ESC 跳过）后**从未销毁该流**，导致它一直占用默认音频设备，后续声音资源（如 `sounds/buttonclick`）加载失败。
+- 后果：按 ESC 跳过开场动画时报 `Failed to load sound: sounds/buttonclick` 的 FATAL ERROR 后崩溃；同一会话再进生存模式也会因音频子系统异常而访问违规（`0xC0000005`）。
+- 修复：在 `PlayVideo()` 的 `SDL_DestroyTexture` 之后补上 `SDL_DestroyAudioStream(audio_playback_stream)`（已在源码中带中文注释标注）。修复后按 ESC 可正常进主菜单，生存模式可正常游玩。
+
 ---
 
 ## 编译环境与工具链（务必核对版本）
@@ -54,6 +59,8 @@
   - **SDL3 / SDL3_ttf**（图形与字体）、**FFmpeg**（avcodec/avformat/avutil/swresample/swscale，视频播放）、**Bass**（音频）、**PortAudio**（麦克风）、**tinyfiledialogs64**（原生对话框）。
 - 若这些 DLL 损坏或缺失，从本仓库重新下载 `bin\` 覆盖即可。
 
+> ⚠️ **Git LFS**：本仓库的 `bin\x64\`、`bin\x86\` 下的 DLL 使用 **Git LFS（大文件存储）** 管理。克隆/下载时请先安装并启用 [Git LFS](https://git-lfs.com/)（`git lfs install`，再 `git lfs pull` 或普通 `git clone`），否则这些 DLL 会以 LFS 指针文件形式出现、无法直接运行游戏。
+
 ### PAK 工具（可选，用于研究 / 复现修改）
 - [Pistonight/pvz-bintools](https://github.com/Pistonight/pvz-bintools)：
   - 解包：`pakc -u <xxx.pak> <输出目录>`
@@ -73,11 +80,15 @@
 ### 2. 选择配置与平台
 - **开发调试**：用 `Debug`（内含调试工具）。
 - **发布**：用 `Release`（优化、无调试工具）。
-- 配置与游戏版本对应：
-  | PvZ 原版 | PvZ GOTY |
-  |---|---|
-  | Debug | DebugGOTY |
-  | Release | ReleaseGOTY |
+- 配置与游戏版本的实际对应关系（已在 `SexyAppBase.vcxproj` 中核实，**注意 x64 与 Win32 不同**）：
+
+  | 平台 | Debug / Release（非 GOTY 名） | DebugGOTY / ReleaseGOTY |
+  |---|---|---|
+  | **Win32**（x86） | 编译为 **OG（2009 原版）** | 编译为 **GOTY（年度版）** |
+  | **x64** | 编译为 **GOTY（年度版）** | 编译为 **GOTY（年度版）** |
+
+  > ⚠️ 这是上游 Fork 的既定行为：**x64 配置无论名字都编译为 GOTY**（工程里带 `_GOTY` 宏），Win32 下才区分 OG / GOTY。本 Fork 不修改这一点——因为中文年度版的内容（成就、生存、Last Stand）依赖 GOTY 宏。
+- **玩中文年度版推荐：`Release` + `x64`**（已是 GOTY，且为优化发布版）。
 - 平台：`x64`（更优性能）或 `Win32`（兼容旧设备）。
 
 ### 3.（可选）修改功能开关

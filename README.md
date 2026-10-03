@@ -64,7 +64,7 @@
 ## 编译步骤
 
 ### 1. 准备工作区
-1. 拥有一份**正版**《植物大战僵尸》（2012中文年度版）。
+1. 拥有一份**正版**《植物大战僵尸》（GOTY 或 2009 原版）。
 2. 把游戏目录（含 `PlantsVsZombies.exe`、`properties\` 文件夹、`main.pak` 的那一层）复制到本项目根目录下，文件夹名取 `Plants Vs Zombies`（或 `Plants Vs. Zombies`，构建脚本只认这两个名字）。
    - Steam 版的 PvZ 有启动器，重要文件在子文件夹里，注意找对层级。
 3. 确认根目录存在：`assets/`、`bin/`、`Editor/`、`include/`、`lib/`、`PakLib/`、`Plants Vs Zombies/`、`Sexy.TodLib/`、`SexyAppFramework/`、`tools/`。
@@ -155,7 +155,7 @@
 
 本项目**不纵容盗版**。项目不包含 PopCap 除其开源引擎之外的任何 IP，仅输出一份对 PvZ 进行"逆向重实现"的、同人性质的 EXE。
 
-- 若以 GOTY 配置编译，你需要拥有正版《植物大战僵尸》2012中文年度版。
+- 若以 GOTY 配置编译，你需要通过 [Steam](https://store.steampowered.com/app/3590/Plants_vs_Zombies_GOTY_Edition/) 购买正版《植物大战僵尸：年度版》以获取原始游戏文件。
 - 若以 2009 配置编译，你需要拥有正版《植物大战僵尸》。
 
 ---
